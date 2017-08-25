@@ -143,10 +143,8 @@
                 redGhost.y = redGhost.starty;
 
             }
-
             console.log("Ghost coord:", redGhost.x, redGhost.y);
             displayGhost();
-
         }
 
         displayWorld();
@@ -154,7 +152,6 @@
         displayGhost();
 
         document.onkeydown = function(e) {
-
             //move left
             if (e.keyCode === 37 && world[pacman.y][pacman.x - 1] !== 2) {
                 $('#pacman').attr("class", "faceLeft");
