@@ -26,7 +26,7 @@
         // 5: red Ghost
         var world = [
             [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-            [2, 0, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2],
+            [2, 0, 1, 4, 1, 2, 1, 1, 1, 1, 1, 2],
             [2, 1, 1, 1, 1, 2, 2, 1, 1, 1, 4, 2],
             [2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2],
             [2, 4, 2, 1, 1, 1, 4, 1, 1, 1, 1, 2],
@@ -48,10 +48,10 @@
         };
 
         var redGhost = {
-            x: 3,
-            y: 3,
-            startx: 3,
-            starty: 3
+            x: 4,
+            y: 4,
+            startx: 4,
+            starty: 4
         }
 
         function displayWorld() {
@@ -77,6 +77,11 @@
             }
             // console.log(output);
             document.getElementById('world').innerHTML = output;
+        }
+
+        function playStartMusic() {
+            var audio = new Audio('pacman_beginning.wav');
+            audio.play();
         }
 
         function displayPacman() {
@@ -133,8 +138,11 @@
             if (pacman.x === redGhost.x && pacman.y === redGhost.y) {
                 lives--;
                 console.log("YOU DIED");
+                // console.log("Ghost coord:", redGhost.x, redGhost.y);
+                // console.log("pacman", pacman.x, pacman.y);
+                var audio1 = new Audio('pacman_death.wav');
+                audio1.play();
                 displayLives();
-
                 // if you die, reset your original start positions.
                 pacman.x = pacman.startx;
                 pacman.y = pacman.starty;
@@ -143,10 +151,12 @@
                 redGhost.y = redGhost.starty;
 
             }
-            console.log("Ghost coord:", redGhost.x, redGhost.y);
+            // console.log("Ghost coord:", redGhost.x, redGhost.y);
+            // console.log("pacman", pacman.x, pacman.y);
             displayGhost();
         }
 
+        playStartMusic();
         displayWorld();
         displayPacman();
         displayGhost();
@@ -176,6 +186,9 @@
 
             if (world[pacman.y][pacman.x] == 1) {
                 world[pacman.y][pacman.x] = 0;
+
+                var audio = new Audio('pacman_chomp.wav');
+                audio.play();
                 score += 10;
                 displayWorld();
                 displayScore();
@@ -183,6 +196,8 @@
             } else if (world[pacman.y][pacman.x] == 4) {
                 world[pacman.y][pacman.x] = 0;
                 score += 50;
+                var audio = new Audio('pacman_chomp.wav');
+                audio.play();
                 displayWorld();
                 displayScore();
                 //go decrement lives and update
@@ -190,7 +205,8 @@
                 lives--;
                 console.log("YOU DIED");
                 displayLives();
-
+                var audio1 = new Audio('pacman_death.wav');
+                audio1.play();
                 // if you die, reset your original start positions.
                 pacman.x = pacman.startx;
                 pacman.y = pacman.starty;
