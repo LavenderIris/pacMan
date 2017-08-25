@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="style.css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+</head>
+
+<body>
+
+    <div id="container">
+        <div id="world"></div>
+        <div id="pacman"></div>
+        <div id="score">0</div>
+        <div id="lives">3</div>
+    </div>
+    <script>
+        // 0: empty
+        // 1: coin
+        // 2: brick
+        // 3: pacman
+        // 4: cherry
+        // 5: red Ghost
+        var world = [
+            [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+            [2, 0, 1, 5, 1, 2, 1, 1, 1, 1, 1, 2],
+            [2, 1, 1, 1, 1, 2, 2, 1, 1, 1, 4, 2],
+            [2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2],
+            [2, 4, 2, 1, 1, 1, 4, 1, 1, 1, 1, 2],
+            [2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2],
+            [2, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 2],
+            [2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2],
+            [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+        ];
+
+        var score = 0;
+
+        var lives = 3;
+
+        var pacman = {
+            x: 1,
+            y: 1
+        };
+
+        var redGhost = {
+            x: 3,
+            y: 1
+        }
+
+        function displayWorld() {
+            var output = "";
+            for (var i = 0; i < world.length; i++) {
+                output += "\n<div class='row'>";
+                for (var j = 0; j < world[i].length; j++) {
+                    if (world[i][j] === 0) {
+                        output += "\n\t<div class='empty'></div>"
+                    } else if (world[i][j] === 1) {
+                        output += "\n\t<div class='coin'></div>"
+                    } else if (world[i][j] === 2) {
+                        output += "\n\t<div class='brick'></div>"
+                    } else if (world[i][j] === 3) {
+                        output += "\n\t<div id='pacman' class='faceRight'></div>"
+                    } else if (world[i][j] === 4) {
+                        output += "\n\t<div class='cherry'></div>"
+                    } else if (world[i][j] === 5) {
+                        output += "\n\t<div class='redGhost'></div>"
+                    }
+                }
+                output += "</div>"
+            }
+            // console.log(output);
+            document.getElementById('world').innerHTML = output;
+        }
+
+        function displayPacman() {
+            document.getElementById('pacman').style.top = pacman.y * 25 + "px";
+            document.getElementById('pacman').style.left = pacman.x * 25 + "px";
+        }
+
+        function displayScore() {
+            document.getElementById('score').innerHTML = score;
+        }
+
+        function displayLives() {
+            document.getElementById('lives').innerHTML = lives;
+        }
+
+        function displayGhost() {
+            document.getElementById('redGhost').style.top = redGhost.y * 25 + "px";
+            document.getElementById('redGhost').style.left = redGhost.x * 25 + "px";
+        }
+        displayWorld();
+        displayPacman();
+        // displayGhost();
+
+        document.onkeydown = function(e) {
+            // console.log(e.keyCode);
+
+            //move left
+            if (e.keyCode === 37 && world[pacman.y][pacman.x - 1] !== 2) {
+                $('#pacman').attr("class", "faceLeft");
+                pacman.x--;
+                // move right
+            } else if (e.keyCode === 39 && world[pacman.y][pacman.x + 1] !== 2) {
+                $('#pacman').attr("class", "faceRight");
+                pacman.x++;
+                // move down
+            } else if (e.keyCode === 38 && world[pacman.y - 1][pacman.x] !== 2) {
+                $('#pacman').attr("class", "faceDown");
+                pacman.y--;
+                // move up
+            } else if (e.keyCode === 40 && world[pacman.y + 1][pacman.x] !== 2) {
+                pacman.y++;
+                $('#pacman').attr("class", "faceUp");
+
+            }
+
+            if (world[pacman.y][pacman.x] == 1) {
+                world[pacman.y][pacman.x] = 0;
+                score += 10;
+                displayWorld();
+                displayScore();
+                //score for cherry
+            } else if (world[pacman.y][pacman.x] == 4) {
+                world[pacman.y][pacman.x] = 0;
+                score += 50;
+                displayWorld();
+                displayScore();
+
+                //go decrement lives and update
+            } else if (pacman.x === redGhost.x && pacman.y === redGhost.y) {
+                lives--;
+                console.log("YOU DIED");
+                displayLives();
+            }
+
+
+
+            displayPacman();
+        }
+    </script>
+
+</body>
+
+
+</html>
